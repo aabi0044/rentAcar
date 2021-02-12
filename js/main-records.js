@@ -4,6 +4,7 @@ function goToHome() {
 var allcars;
 var selectedCard;
 var allRecords;
+var tableData;
 function allRecords() {
 
 }
@@ -45,6 +46,8 @@ function renderCard(inputData) {
 
     document.getElementById('cars-rows').innerHTML = data
 }
+
+
 function handleCarCard(idx) {
     const filteredCar = allcars.filter(c => c.id === idx)[0];
     selectedCard = filteredCar;
@@ -53,31 +56,37 @@ function handleCarCard(idx) {
 
 function SingleCarRecords() {
     const resp = allRecords.filter(r => r.carId === selectedCard.id);
- resp.map(record => (
-        
-    record.number= selectedCard.number,
-    record.model= selectedCard.model,
-    record.name= selectedCard.name,
-    record.color= selectedCard.color
-        
+    resp.map(record => (
+
+        record.number = selectedCard.number,
+        record.model = selectedCard.model,
+        record.name = selectedCard.name,
+        record.color = selectedCard.color
+
     ))
     document.getElementById('card-title').innerText = `${selectedCard.name.toUpperCase()} | ${selectedCard.number} | ${selectedCard.model} | ${selectedCard.color}`
     renderTable(resp)
 }
-async function  allRecordsHandler(){
-document.getElementById('card-title').innerText = "ALL CARS DATA"
-     await allRecords.map(record =>{
-        const car = allcars.filter(car =>car.id===record.carId)[0]
-            record.number= car.number,
-            record.model= car.model,
-            record.name= car.name,
-            record.color= car.color
+async function allRecordsHandler() {
+    document.getElementById('card-title').innerText = "ALL CARS DATA"
+    await allRecords.map(record => {
+        const car = allcars.filter(car => car.id === record.carId)[0]
+        record.number = car.number,
+            record.model = car.model,
+            record.name = car.name,
+            record.color = car.color
     })
     renderTable(allRecords)
-    
-}
 
+}
+function searchRecords() {
+
+    const searchText = document.getElementById("searchRecordValue").value;
+    console.log(searchText);
+    console.log(tableData);
+}
 function renderTable(data) {
+    tableData = data;
     var tableelem = document.getElementById('table-content');
     var carselem = document.getElementById('cars-rows');
     let tableData = "";
@@ -105,11 +114,11 @@ function renderTable(data) {
     tableelem.classList.add("show-table")
     carselem.classList.remove("show-cars")
     carselem.classList.add("hide-cars")
-console.log(tableData)
+    console.log(tableData)
     document.getElementById('tableData').innerHTML = tableData
 }
 
-function backToCards(){
+function backToCards() {
     var tableelem = document.getElementById('table-content');
     var carselem = document.getElementById('cars-rows');
     tableelem.classList.add("hide-table")
