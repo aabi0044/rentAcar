@@ -840,7 +840,7 @@ padding: 0px 10px;
 border-radius: 5px;
 }
 .search-btn-clear{
-    background: greenyellow;
+    background: gold;
     color: black;
     padding: 0px 10px;
     border-radius: 5px;
@@ -877,7 +877,7 @@ font-size: larger;
     display:none;
 }
 .status-card{
-    transition: transform .2s;
+    /* transition: transform .1s; */
     cursor: pointer;
 }
 .status-card:hover{
