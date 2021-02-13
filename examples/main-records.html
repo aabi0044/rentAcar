@@ -77,9 +77,13 @@
                                    <div class="d-flex"> 
                                        <li class="nav-item mr-1 d-flex" style="list-style-type:none">
                                           
-                                           <input id="searchRecordValue" style="height:35px;min-width: 350px;"  class="dashbord-search-input mr-1" type="text"
-                                               placeholder="Search Car# ,Person name, Mobile#" />
-                                               <p >
+                                           <input id="searchcn" onkeyup="searchCarNumRecords()" style="height:35px;"  class="dashbord-search-input mr-1" type="text"
+                                               placeholder="Search Car# " />
+                                               <input id="searchpn" onkeyup="searchPNameRecords()" style="height:35px;"  class="dashbord-search-input mr-1" type="text"
+                                               placeholder="Search Person name " />
+                                               <input id="searchphone" onkeyup="searchMobileRecords()" style="height:35px;"  class="dashbord-search-input mr-1" type="text"
+                                               placeholder="Search  Mobile#" />
+                                               <!-- <p >
                                                    <a href="#" class="nav-link p-0 mt-0 mb-1 ml-0 mr-0" style="margin-bottom:5px">
                                                        <span class="d-lg-block search-btn" onclick="searchRecords()"
                                                            type="button">&nbsp;Search</span>
@@ -87,7 +91,7 @@
                                                    <a href="#" class="nav-link p-0 m-0">
                                                        <span  onclick="clearSearch()" class="d-lg-block search-btn-clear" type="button">&nbsp;Clear</span>
                                                    </a>
-                                               </p>
+                                               </p> -->
                                         
                                        </li> 
                                        
@@ -126,6 +130,29 @@
             </div>
 
         </div>
+    </div>
+    <button style="display:none"  id="updateRecordModal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateRecord">
+    </button>
+    
+    <!-- Modal -->
+    <div   class="modal fade" style="margin-top:-230px" id="updateRecord" tabindex="-1" role="dialog" aria-labelledby="updateRecord" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Update order </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div id="update-record-content" class="modal-body">
+           
+          </div>
+          <div class="modal-footer">
+            <button id="udpateRowModel" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="updateOrderRow()">Save changes</button>
+          </div>
+        </div>
+      </div>
     </div>
 
  </body>

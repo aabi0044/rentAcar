@@ -11,8 +11,9 @@ function fetchCars() {
             return true;
         })
 }
-var allcars=null;
-var selectedCard=null;
+var allcars = null;
+var selectedCard = null;
+var selectedOrder;
 
 
 
@@ -70,21 +71,21 @@ function createOrder() {
     var pnumber = document.getElementById('pnumber').value;
     var pid = document.getElementById('pid').value;
     const finalObj = {
-         dutyandplace,
-          sdate,
-          adate:"",
-           amount,
-            td, 
-            ta:"",
-            pname,
-            pnumber,
-            pid, 
-            co,
-             remarks,
-              carId: selectedCard.id
-             };
+        dutyandplace,
+        sdate,
+        adate: "",
+        amount,
+        td,
+        ta: "",
+        pname,
+        pnumber,
+        pid,
+        co,
+        remarks,
+        carId: selectedCard.id
+    };
     console.log(finalObj)
-    if (dutyandplace === "" || sdate === "" || td === "" ) {
+    if (dutyandplace === "" || sdate === "" || td === "") {
         element.classList.add("order-show-error")
         element.classList.remove("order-hide-error")
     } else {
@@ -100,7 +101,8 @@ function createOrder() {
             body: JSON.stringify(finalObj)
         }).then(response => response.json())
             .then(res => {
-                updateCarStatus(true, res.id)
+                updateCarStatus(true, res.id);
+                resetOrderForm()
             }).catch(err => {
                 console.log("err", err)
                 element.classList.add("show-error")
@@ -147,37 +149,130 @@ function resetOrderForm() {
     document.getElementById('dutyandplace').value = null;
     document.getElementById('sdate').value = null;
     document.getElementById('amount').value = null;
-    document.getElementById('td').value = null;
     document.getElementById('ta').value = null;
     document.getElementById('co').value = null;
     document.getElementById('remarks').value = null;
+    document.getElementById('pname').value = null;
+    document.getElementById('pnumber').value = null;
+    document.getElementById('pid').value = null;
 }
 
 function clearSearch() {
     renderCard(allcars)
 }
 
-function handleCarCard(idx) {
+async function handleCarCard(idx) {
     const filteredCar = allcars.filter(c => c.id === idx)[0];
     selectedCard = filteredCar;
     if (filteredCar.booked) {
+        const order = await orderDetails(filteredCar.orderId);
+        selectedOrder = order;
         document.getElementById("updateCarModal").click();
         var modalBody = document.getElementById("update-modal-content");
         const data = `
+        <form>
+        <div class="container">
         <div class="row">
-        <div class="col-12 text-center">
-            <h4>${filteredCar.name}</h4>
-            <h4>${filteredCar.model}</h4>
-            <h4>${filteredCar.number}</h4>
+        <div class="col-md-12 text-center">
+            <h3 style="font-weight: bold"> ${selectedCard.name.toUpperCase()} | ${selectedCard.number.toUpperCase()} (${selectedCard.model})</h3>
+           <p></p>
         </div>
-        
+        </div>
+         </div>
+    
+        <div class="row">
+            <div class="col-md-3 ">
+                <div class="form-group d-flex">
+                    <label style="white-space:nowrap">Duty and place: </label>
+                    <span class="update-info-feild ml-1"> ${order.dutyandplace}</span>
+                </div>
+            </div>
+
+            <div class="col-md-3 ">
+            <div class="form-group d-flex">
+                <label style="white-space:nowrap">Issue Date:  </label>
+                <span class="update-info-feild ml-1"> ${order.sdate}</span>
+            </div>
+        </div>
+        <div class="col-md-3">
+        <div class="form-group d-flex">
+            <label>Amount: </label>
+            <span class="update-info-feild ml-1"> ${order.amount}</span>
+        </div>
     </div>
+    <div class="col-md-3">
+    <div class="form-group d-flex">
+        <label>T/D: </label>
+        <span class="update-info-feild ml-1"> ${order.td}</span>
+    </div>
+</div>
+
+<div class="col-md-3">
+<div class="form-group d-flex">
+    <label>Phone#: </label>
+    <span class="update-info-feild ml-1" > ${order.pnumber}</span>
+</div>
+</div>
+<div class="col-md-3">
+<div class="form-group d-flex">
+    <label>Name: </label>
+    <span class="update-info-feild ml-1"> ${order.pname}</span>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="form-group d-flex">
+    <label>ID#: </label>
+    <span class="update-info-feild ml-1"> ${order.pid}</span>
+</div>
+</div>
+
+
+<div class="col-md-3">
+<div class="form-group d-flex">
+    <label>C/O: </label>
+    <span class="update-info-feild ml-1"> ${order.co}</span>
+</div>
+</div>
+
+<div class="col-md-12">
+<div class="form-group d-flex">
+    <label>Remarks: </label>
+    <span class="update-info-feild ml-1"> ${order.remarks}</span>
+</div>
+</div>
+         
+        </div>
+        <div class="row">
+        <div class="col-md-6 ">
+        <div class="form-group">
+        <label>Date</label>
+        <input id="adate" type="date" class="form-control date-time" >
+    </div>
+        </div>
+        <div class="col-md-6 ">
+        <div class="form-group">
+            <label>T/A</label>
+            <input id="ta" type="time" class="form-control date-time" >
+        </div>
+    </div>
+     
+    </div>
+        <div class="row">
+        <div class="col-md-12 text-center ">
+        <span id="update-form-error" class="error update-hide-error">
+        Please enter valid data
+    </span>
+        </div>
+        </div>
+    </form>
         `; modalBody.innerHTML = data
     } else {
         document.getElementById("issueCarModal").click();
         var modalBody = document.getElementById("issue-modal-content");
         const data = `
         <form>
+        
         <div class="row">
             <div class="col-md-12 ">
                 <div class="form-group">
@@ -269,7 +364,37 @@ function handleCarCard(idx) {
 
 
 }
+function orderDetails(id) {
+    return fetch(`http://localhost:3000/orders/${id}`).then(res => res.json())
+}
 
+
+function closeOrder() {
+    var element = document.getElementById('update-form-error');
+    var ta = document.getElementById('ta').value;
+    var adate = document.getElementById('adate').value;
+    if(ta==="" || adate===""){
+        element.classList.add("update-show-error")
+        element.classList.remove("update-hide-error")
+    }else{
+        element.classList.remove("update-show-error")
+        element.classList.add("update-hide-error")
+        selectedOrder.ta = ta; selectedOrder.adate = adate;
+        let url = `http://localhost:3000/order/${selectedOrder.id}`
+        fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(selectedOrder)
+        }).then(async data => {
+            updateCarStatus(false, selectedOrder.id)
+            document.getElementById('udpateModel').click();
+        })
+    }
+ 
+}
 
 function renderCard(inputData) {
     let data = ''
