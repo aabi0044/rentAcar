@@ -131,9 +131,13 @@ function updateCarStatus(booked, orderId) {
 }
 function searchCars() {
     var value = document.getElementById('searchValue').value;
-    var filteredResult = allcars.filter(item => item.number.toLowerCase().includes(value.toLowerCase()));
+    if (value === '') {
+        renderCard(allcars)
+    } else {
+        var filteredResult = allcars.filter(item => item.number.toLowerCase().includes(value.toLowerCase()));
+        renderCard(filteredResult)
+    }
 
-    renderCard(filteredResult)
 }
 function resetAddForm() {
     document.getElementById('name').value = null;
@@ -373,10 +377,10 @@ function closeOrder() {
     var element = document.getElementById('update-form-error');
     var ta = document.getElementById('ta').value;
     var adate = document.getElementById('adate').value;
-    if(ta==="" || adate===""){
+    if (ta === "" || adate === "") {
         element.classList.add("update-show-error")
         element.classList.remove("update-hide-error")
-    }else{
+    } else {
         element.classList.remove("update-show-error")
         element.classList.add("update-hide-error")
         selectedOrder.ta = ta; selectedOrder.adate = adate;
@@ -393,7 +397,7 @@ function closeOrder() {
             document.getElementById('udpateModel').click();
         })
     }
- 
+
 }
 
 function renderCard(inputData) {
